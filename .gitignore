@@ -1,0 +1,4 @@
+temp*
+.conda
+__pycache__
+.env
