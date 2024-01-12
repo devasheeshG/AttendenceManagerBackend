@@ -1,0 +1,12 @@
+bs4
+pytesseract
+fastapi
+requests
+pandas
+lxml
+uvicorn
+httpx
+psycopg2-binary
+pymongo
+python-dotenv
+schedule
