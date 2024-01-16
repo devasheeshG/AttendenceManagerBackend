@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  app:
+    container_name: attendance-manager-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      - NODE_ENV=development
+    command: uvicorn main:app --host=127.0.0.1 --port=8000
