@@ -88,7 +88,7 @@ This API can be deployed locally or on a server using Docker. Follow the provide
 
 ## Credits 🙌
 
-This project was developed by [Devasheesh Mishra](https://github.com/devasheeshG/ "Github Profile") and [Dhruv Singh Poniya](https://github.com/Dhruv-Singh-Poniya/ "Github Profile"). If you have any questions or suggestions, feel free to reach out.
+This project was developed by [Devasheesh Mishra](https://github.com/devasheeshG/ "Github Profile"), [Aarush Dwivedi](https://github.com/XEREXUS/ "Github Profile") [Dhruv Singh Poniya](https://github.com/Dhruv-Singh-Poniya/ "Github Profile"). If you have any questions or suggestions, feel free to reach out.
 
 ---
 
