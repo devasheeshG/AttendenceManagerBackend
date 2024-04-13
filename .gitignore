@@ -1,4 +1,6 @@
 temp*
+cache/
 .conda
 __pycache__
 .env
+experiments/response.html
