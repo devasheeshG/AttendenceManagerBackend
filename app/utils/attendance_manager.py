@@ -154,3 +154,93 @@ class AttendanceManager:
             daywise_absent_details,
         )
 
+    async def get_timetable(self, db: Session) -> dict[str, dict[str, str]]:
+        """Get Timetable."""
+        response = await self.client.post(TIMETABLE_PAGE_URI)
+        soup = BeautifulSoup(response.text, "html.parser")
+        timetable, legends = soup.findAll("table", class_="table")
+        timetable = pd.read_html(StringIO(str(timetable)))[0]
+        legends = pd.read_html(StringIO(str(legends)))[0]
+
+        # Clean the timetable dataframe
+        timetable.replace("-", pd.NA, inplace=True)
+        timetable.columns = timetable.columns.droplevel(0)
+        timetable.rename(columns={"Day order": "Day"}, inplace=True)
+
+        # Clean the legends dataframe
+        legends.rename(
+            columns={"Code": "SubCode", "Description": "SubName"}, inplace=True
+        )
+
+        # Create a map of subject name to subject code
+        sub_map = {}
+        for data in legends.to_dict(orient='records'):
+            res = db.query(models.Subjects).filter(models.Subjects.SubjectCode == data['SubCode'].strip()).first()
+            if res:
+                sub_map[res.SubjectCode] = res.Alias
+            else:
+                sub_map[data['SubCode'].strip()] = data['SubName'].strip()
+
+        # Replace the subject name with subject code in the timetable dataframe
+        for idx, row in timetable.iterrows():
+            for col in timetable.columns:
+                # If there is a single subject code in the cell
+                if row[col] in sub_map:
+                    timetable.at[idx, col] = sub_map[row[col]]
+
+                # For electives where there are multiple subject codes
+                elif isinstance(row[col], str) and len(row[col].split(" ")) > 1:
+                    sub_codes = row[col].split(" ")
+                    sub_names = [sub_map[sub_code] for sub_code in sub_codes]
+                    timetable.at[idx, col] = " / ".join(sub_names)
+
+        class_time = [
+            "Day",
+            "9:20-10:10",
+            "10:10-11:00",
+            "11:10-12:00",
+            "12:00-12:50",
+            "2:00-2:50",
+            "2:50-3:40",
+            "3:40-4:30",
+        ]
+
+        timetable.drop("04:00-04:50", axis=1, inplace=True)
+        timetable.columns = class_time
+        timetable.drop(5, inplace=True)
+
+        new_timetable = {}
+        for item in timetable.to_dict(orient="records"):
+            day = ""
+            for key, value in item.items():
+                if key == "Day":
+                    day = value
+                    new_timetable[day] = {}
+                else:
+                    new_timetable[day][key] = value
+
+        return new_timetable
+
+    async def get_subject_name_from_subject_code_from_timetable_page(self, subject_code: str) -> str:
+        """Get Subject Name from Subject Code from Timetable Page."""
+        response = await self.client.post(TIMETABLE_PAGE_URI)
+        soup = BeautifulSoup(response.text, "html.parser")
+        legends = soup.findAll("table", class_="table")[1]
+        legends = pd.read_html(StringIO(str(legends)))[0]
+
+        # Clean the legends dataframe
+        legends.rename(
+            columns={"Code": "SubCode", "Description": "SubName"}, inplace=True
+        )
+
+        # Create a map of subject name to subject code
+        sub_map = {
+            data["SubCode"].strip(): data["SubName"].strip()
+            for data in legends.to_dict(orient="records")
+        }
+
+        return sub_map.get(subject_code, None)
+    
+    async def close(self) -> None:
+        """Close HTTP client."""
+        await self.client.aclose()
