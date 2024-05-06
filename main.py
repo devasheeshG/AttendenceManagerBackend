@@ -10,7 +10,6 @@ from utils.attendance_manager import AttendanceManager
 from utils.data_models import User
 from utils.notifications import Notifications
 
-
 async def update_attendence():
     """Update Attendence Database."""
     while True:
@@ -29,7 +28,7 @@ async def update_attendence():
         for r in result:
             print(r)
         del db
-        await asyncio.sleep(1000)
+        await asyncio.sleep(10)
 
 
 # Schedule the update_attendence_database function to run every 10min for each user
@@ -193,5 +192,4 @@ async def get_all_notifications(username: str = Form(default="")):
 
 if __name__ == "__main__":
     import uvicorn
-
     uvicorn.run(app, host="127.0.0.1", port=8000)
