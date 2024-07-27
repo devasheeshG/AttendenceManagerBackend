@@ -86,10 +86,6 @@ Welcome to the SRM Student Portal Attendance Manager API! This API provides endp
 
 This API can be deployed locally or on a server using Docker. Follow the provided Dockerfile and docker-compose.yml files to build and run the containerized application.
 
-## Credits 🙌
-
-This project was developed by [Devasheesh Mishra](https://github.com/devasheeshG/ "Github Profile"), [Aarush Dwivedi](https://github.com/XEREXUS/ "Github Profile") and [Dhruv Singh Poniya](https://github.com/Dhruv-Singh-Poniya/ "Github Profile"). If you have any questions or suggestions, feel free to reach out.
-
 ---
 
 Happy coding! 🚀📚
