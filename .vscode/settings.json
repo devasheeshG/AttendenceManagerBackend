@@ -8,6 +8,8 @@
         "**/Thumbs.db": true,
         "**/__pycache__": true,
         "**/.vscode": true,
-        "**/.conda": true,
+        "**/.venv": true,
+	"poetry.lock": true,
+
     },
 }
