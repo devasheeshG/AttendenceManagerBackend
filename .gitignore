@@ -4,3 +4,5 @@ cache/
 __pycache__
 .env
 experiments/response.html
+poetry.lock
+venv/

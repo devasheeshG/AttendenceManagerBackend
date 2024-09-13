@@ -9,5 +9,7 @@
         "**/__pycache__": true,
         "**/.vscode": true,
         "**/.conda": true,
+	"**/.venv": true,
+	"poetry.lock": true
     },
 }
